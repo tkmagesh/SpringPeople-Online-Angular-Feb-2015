@@ -33,10 +33,19 @@
                 triggerEvents(attrName)
             };
             
-            var _subscribers = {};
+            var _subscribers = {
+                basic : [],
+                hra : [],
+                da : [],
+                tax : [],
+                salary : []
+            };
             
             this.addSubscriber = function(attrName, subscriptionFn){
-                _subscribers[attrName] = _subscribers[attrName] || [];
+                //_subscribers[attrName] = _subscribers[attrName] || [];
+                /*if (typeof _subscribers[attrName] === "undefined")
+                    _subscribers[attrName] = [];*/
+                
                 _subscribers[attrName].push(subscriptionFn);
             };
             
@@ -62,63 +71,80 @@
         }
         
         //View
-        $(function(){
-            window.calculator = new SalaryCalculator();
-            
-            //UI Events
-            $("#txtBasic").change(function(){
-                calculator.set('basic', parseInt(this.value,10));
-            });
-            $("#txtHra").change(function(){
-                calculator.set('hra' , parseInt(this.value,10));
-            });
-            $("#txtDa").change(function(){
-                calculator.set('da', parseInt(this.value,10));
-            });
-            $("#rangeTax").change(function(){
-                calculator.set('tax', parseInt(this.value,10));
-            });
-            $("#btnCalculate").click(function(){
-                 calculator.calculate();
-            });
-            
-            //Model Events
-            calculator.addSubscriber('salary', function(){
-                 $("#divResult").html(calculator.get('salary'));
-            });
-            
-            calculator.addSubscriber('basic',function(){
-                $("#txtBasic").val(calculator.get('basic'));
-            })
-            calculator.addSubscriber('hra',function(){
-                $("#txtHra").val(calculator.get('hra'));
-            })
-            calculator.addSubscriber('da',function(){
-                $("#txtDa").val(calculator.get('da'));
-            })
-            calculator.addSubscriber('tax',function(){
-                $("#rangeTax").val(calculator.get('tax'));
-                $("#spanTax").html(calculator.get('tax') + '%');
-            });
-            
-            
-        });
+        function SalaryCalculatorView($root, calculator){
+            this.init = function(){
+                 //UI Events
+                $("#txtBasic", $root).change(function(){
+                    calculator.set('basic', parseInt(this.value,10));
+                });
+                $("#txtHra", $root).change(function(){
+                    calculator.set('hra' , parseInt(this.value,10));
+                });
+                $("#txtDa", $root).change(function(){
+                    calculator.set('da', parseInt(this.value,10));
+                });
+                $("#rangeTax", $root).change(function(){
+                    calculator.set('tax', parseInt(this.value,10));
+                });
+                $("#btnCalculate", $root).click(function(){
+                     calculator.calculate();
+                });
+
+                //Model Events
+                calculator.addSubscriber('salary', function(){
+                     $("#divResult", $root).html(calculator.get('salary'));
+                });
+
+                calculator.addSubscriber('basic',function(){
+                    $("#txtBasic", $root).val(calculator.get('basic'));
+                })
+                calculator.addSubscriber('hra',function(){
+                    $("#txtHra", $root).val(calculator.get('hra'));
+                })
+                calculator.addSubscriber('da',function(){
+                    $("#txtDa", $root).val(calculator.get('da'));
+                })
+                calculator.addSubscriber('tax',function(){
+                    $("#rangeTax", $root).val(calculator.get('tax'));
+                    $("#spanTax", $root).html(calculator.get('tax') + '%');
+                });    
+            }
+        }
+        
     </script>
 </head>
 <body>
     <h1>Salary Calculator</h1>
-    <hr>
-    <div><label for="">Basic :</label><input type="text" name="" id="txtBasic"></div>
-    <div><label for="">HRA :</label><input type="text" name="" id="txtHra"></div>
-    <div><label for="">DA :</label><input type="text" name="" id="txtDa"></div>
-    <div>
-        <label for="">Tax :</label>
-        <input type="range" name="" id="rangeTax" min="0" max="30" value="0">
-        <span id="spanTax">[Tax%]</span>
+    <div id="view1Root">
+        <hr>
+        <div><label for="">Basic :</label><input type="text" name="" id="txtBasic"></div>
+        <div><label for="">HRA :</label><input type="text" name="" id="txtHra"></div>
+        <div><label for="">DA :</label><input type="text" name="" id="txtDa"></div>
+        <div>
+            <label for="">Tax :</label>
+            <input type="range" name="" id="rangeTax" min="0" max="30" value="0">
+            <span id="spanTax">[Tax%]</span>
+        </div>
+        <div><input type="button" value="Calculate" id="btnCalculate"></div>
+        <div>
+            <div id="divResult">[Salary]</div>
+        </div>    
     </div>
-    <div><input type="button" value="Calculate" id="btnCalculate"></div>
-    <div>
-        <div id="divResult">[Salary]</div>
+    <div id="view2Root">
+        <hr>
+        <div><label for="">Basic :</label><input type="text" name="" id="txtBasic"></div>
+        <div><label for="">HRA :</label><input type="text" name="" id="txtHra"></div>
+        <div><label for="">DA :</label><input type="text" name="" id="txtDa"></div>
+        <div>
+            <label for="">Tax :</label>
+            <input type="range" name="" id="rangeTax" min="0" max="30" value="0">
+            <span id="spanTax">[Tax%]</span>
+        </div>
+        <div><input type="button" value="Calculate" id="btnCalculate"></div>
+        <div>
+            <div id="divResult">[Salary]</div>
+        </div>
     </div>
+    
 </body>
 </html>
