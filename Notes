@@ -8,4 +8,53 @@ Secrets of the JavaScript Ninja - Manning Publication
 
 Views
     - As dumb as possible
-    - Reactive  
+    - Reactive 
+    
+    
+Day-2
+=====
+1. Model & Views synchronized
+2. Modularize
+3. Dependency Injection
+4. Generating Views
+5. Routing
+6. Server Communication
+
+
+Knockout.js
+    1 & 4
+    For 2 & 3 -> Require.js
+    For 5 -> crossroads.js
+    For 6 -> breeze.js
+    
+Backbone.js
+    2, 5, & 6
+    For 1 -> Code it
+    For 3 -> Require.js
+    For 4 -> Handlebars.js & jQuery
+    
+Ember.js 
+    Everything except 3
+    
+Angular.js
+
+
+Building Blocks Angular.js
+===========================
+
+1. Module
+     - Container for all your application components
+     
+2. Controller
+3. Directive
+4. Filter
+5. Factory
+6. Service
+7. Provider
+8. Value
+9. Constant
+
+
+
+
+    

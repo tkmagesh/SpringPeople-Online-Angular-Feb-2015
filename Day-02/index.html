@@ -27,18 +27,37 @@
             this.salary = gross * ((100-parseInt(this.tax,10))/100)
         }
         
-        var myApp = angular.module("myApp",[]);
+        var utilsApp = angular.module("utils",[]);
+        utilsApp.controller("calculatorController1", function($scope){
+            $scope.calculator = new SalaryCalculator();
+        });
+        
+        
+        
+        var myApp = angular.module("myApp",["utils"]);
         
         myApp.run(function($rootScope){
-            $rootScope.calculator = new SalaryCalculator();
+            $rootScope.LoggedInUser = "Magesh";
         });
+        
+        
+        
+        myApp.controller("calculatorController2", function($scope){
+            $scope.calculator = new SalaryCalculator();
+        });
+        
+       
+        
         
     </script>
 </head>
 <body ng-app="myApp">
     <h1>Salary Calculator</h1>
-    <div id="view1Root">
+    
+    <div id="view1Root" ng-controller="calculatorController1">
+          
         <hr>
+        <h3>{{LoggedInUser}}</h3>
         <div><label for="">Basic :</label><input type="text" ng-model="calculator.basic" ></div>
         <div><label for="">HRA :</label><input type="text" ng-model="calculator.hra" ></div>
         <div><label for="">DA :</label><input type="text" ng-model="calculator.da" ></div>
@@ -49,11 +68,13 @@
         </div>
         <div><input type="button" value="Calculate" id="btnCalculate" ng-click="calculator.calculate()"></div>
         <div>
-            <div id="divResult">{{calculator.salary}}</div>
+            <div id="divResult">{{calculator.salary | currency:'Rs.'}}</div>
         </div>    
     </div>
-    <div id="view2Root">
+    <div id="view2Root" ng-controller="calculatorController2">
+       
         <hr>
+        <h3>{{LoggedInUser}}</h3>
         <div><label for="">Basic :</label><input type="text" ng-model="calculator.basic" ></div>
         <div><label for="">HRA :</label><input type="text" ng-model="calculator.hra" ></div>
         <div><label for="">DA :</label><input type="text" ng-model="calculator.da" ></div>
