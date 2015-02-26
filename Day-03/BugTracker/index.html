@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bug Tracker</title>
+    <style>
+    h1{
+        border-top : 2px solid blue;
+        border-bottom : 2px solid blue;
+        padding: 10px;
+        background-color: lightblue;
+    }
+    li{
+        cursor: pointer;
+    }
+    .closed {
+        color: red;
+        font-style: italic;
+        font-weight: bold;
+        text-decoration: line-through;
+    }
+    </style>
+    <script src="angular.js"></script>
+    <script>
+        var bugTrackerApp = angular.module('bugTrackerApp',[]);
+        bugTrackerApp.controller("bugsController", function($scope){
+            $scope.bugs = [
+                {title : "Login button is disabled", isClosed : false},
+                {title : "Application shuts down frequently", isClosed : false},
+                {title : "Server communication is non deterministic", isClosed : false}
+            ];
+
+            $scope.addBug = function(title){
+                $scope.bugs.push(title);
+            };
+
+            $scope.toggleStatus = function(bug){
+                bug.isClosed = !bug.isClosed;
+            };
+            $scope.shouldAddClass = false;
+        });
+    </script>
+</head>
+<body ng-app="bugTrackerApp">
+    <h1>Bug Tracker</h1>
+    <div ng-controller="bugsController">
+        <label for="">Bug Title :</label>
+        <input type="text" ng-model="newBugTitle">
+        <input type="button" value="Add Bug" ng-click="addBug(newBugTitle)">
+        <input type="button" value="Remove Closed">
+        <ol>
+            <li
+                ng-repeat="bug in bugs"
+                ng-click="toggleStatus(bug)"
+                ng-class="{closed : bug.isClosed}"
+                >{{bug}}</li>
+        </ol>
+
+    </div>
+
+</body>
+</html>

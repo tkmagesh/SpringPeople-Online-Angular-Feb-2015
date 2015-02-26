@@ -54,6 +54,32 @@ Building Blocks Angular.js
 8. Value
 9. Constant
 
+Digest cycle is triggered when you call 
+$scope.$apply(function(){
+    
+})
+
+
+Day-3
+=====
+Bug Tracker
+Use Cases
+=========
+
+1. Display a list of bugs
+2. Add a new Bug
+3. Close an existing Bug
+4. Status of the bug (Closed / Open) has to be displayed visually
+5. Remove the closed bugs
+6. Display statistics
+7. Search for bugs
+8. Display the 'created at' for each bug
+9. sort the bugs by title or status or createdAt
+10. Persist the bugs in the local storage
+11. Persist the bugs in the server
+12. Add validations to the bugs screen
+13. Create categories of bugs
+14. Implement a routing strategy
 
 
 
