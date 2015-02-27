@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bug Tracker</title>
+    <style>
+    h1{
+        border-top : 2px solid blue;
+        border-bottom : 2px solid blue;
+        padding: 10px;
+        background-color: lightblue;
+    }
+    li{
+        cursor: pointer;
+    }
+    .closed {
+        color: red;
+        font-style: italic;
+        font-weight: bold;
+        text-decoration: line-through;
+    }
+    .bugTitle{
+         font-weight: bold;
+    }
+    .timeStamp{
+        font-size: small;
+        font-style: italic;
+    }
+    th{
+        cursor: pointer;
+    }
+    </style>
+    <script src="angular.js"></script>
+    <script src="moment.js"></script>
+    <script>
+        //Bug Class
+
+        ////////////////////
+
+
+        var bugTrackerApp = angular.module('bugTrackerApp',[]);
+
+        bugTrackerApp.factory("Bug", function(){
+            function Bug(defaults){
+                this.title = defaults.title;
+                this.isClosed = defaults.isClosed;
+                this.createdAt = defaults.createdAt;
+            }
+
+            Bug.prototype.toggleStatus = function(){
+                this.isClosed = !this.isClosed;
+            }
+            return Bug;
+        });
+
+
+        bugTrackerApp.controller("bugsController", function bugsController($scope, Bug){
+            $scope.bugs = [
+                new Bug({
+                    title : "Login button is disabled",
+                    isClosed : false,
+                    createdAt : new Date("10-Jan-2015")
+                }),
+                new Bug({
+                    title : "Application shuts down frequently",
+                    isClosed : false,
+                    createdAt : new Date("10-Feb-2015")
+                }),
+                new Bug({
+                    title : "Server communication is non deterministic",
+                    isClosed : false,
+                    createdAt : new Date("15-Feb-2015")
+                })
+            ];
+
+            $scope.addBug = function(bugTitle){
+                $scope.bugs.push(new Bug({
+                    title : bugTitle,
+                    isClosed : false
+                }));
+            };
+
+            $scope.toggleStatus = function(bug){
+                bug.toggleStatus();
+            };
+            $scope.getClosedCount = function(){
+                return $scope.bugs.filter(function (bug){
+                    return bug.isClosed;
+                }).length;
+            };
+
+            $scope.removeClosed = function(){
+                for(var i= $scope.bugs.length-1; i>=0; i--){
+                    if ($scope.bugs[i].isClosed){
+                        $scope.bugs.splice(i,1);
+                    }
+                }
+            };
+
+        });
+        bugTrackerApp.filter("trimText", function(){
+            return function(data, trimLength){
+                return data.length > trimLength ? data.substr(0,trimLength)+"..." : data ;
+            }
+        });
+        bugTrackerApp.filter("closedCount", function(){
+            return function(list){
+                return list.filter(function(item){ return item.isClosed}).length;
+            }
+        });
+        bugTrackerApp.filter("toMoment", function(){
+            return function(dateTime){
+                return moment(dateTime).fromNow();
+            }
+        });
+    </script>
+</head>
+<body ng-app="bugTrackerApp">
+    <h1>Bug Tracker</h1>
+    <div ng-controller="bugsController">
+        <h3>Search</h3>
+        <div>
+            <input type="text" ng-model="searchBug.title">
+        </div>
+        <h3>{{bugs | closedCount }} / {{bugs.length}}</h3>
+        <label for="">Bug Title :</label>
+        <input type="text" ng-model="newBugTitle">
+        <input type="button" value="Add Bug" ng-click="addBug(newBugTitle)">
+        <input type="button" value="Remove Closed" ng-click="removeClosed()">
+        <ol>
+            <!--<li
+                ng-repeat="bug in bugs | orderBy:'createdAt':true | filter:searchBug "
+                ng-click="toggleStatus(bug)"
+                ng-class="{closed : bug.isClosed}"
+                >
+                <span class="bugTitle">{{bug.title | trimText:30}}</span> -
+                <span class="timeStamp">{{bug.createdAt | toMoment}}</span>
+                </li>-->
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th ng-click="sortOrder = sortField == 'title' ? !sortOrder : false; sortField = 'title'; ">Title</th>
+                            <th ng-click="sortOrder = sortField == 'isClosed' ? !sortOrder : false; sortField = 'isClosed'">isClosed?</th>
+                            <th ng-click="sortOrder = sortField == 'createdAt' ? !sortOrder : false; sortField = 'createdAt'">Created At</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="bug in bugs | orderBy:sortField:sortOrder | filter:searchBug ">
+                            <td>{{bug.title}}</td>
+                            <td>{{bug.isClosed}}</td>
+                            <td>{{bug.createdAt | toMoment}}</td>
+                            <td><input type="button" value="Toggle Status" ng-click="toggleStatus(bug)"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div>{{sortField}} - {{sortOrder}}</div>
+        </ol>
+    </div>
+
+</body>
+</html>
