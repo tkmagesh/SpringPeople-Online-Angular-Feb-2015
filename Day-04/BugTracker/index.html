@@ -40,25 +40,27 @@
 
         var bugTrackerApp = angular.module('bugTrackerApp',[]);
 
-        bugTrackerApp.service("bugStorage", function(Bug){
+        bugTrackerApp.value("storageOption", "localStorage");
+        bugTrackerApp.value("defaultTrimLength", 20);
 
-            var storage = window.localStorage;
+        bugTrackerApp.service("bugStorage", function($window, Bug, storageOption){
+
+            var storage = $window[storageOption];
 
             this.getAll = function(){
                 var result = []
                 for(var i = 0; i<storage.length; i++){
                     var bugId = storage.key(i);
                     var bugDataAsString = storage.getItem(bugId);
-                    var bugObjectData = window.JSON.parse(bugDataAsString);
+                    var bugObjectData = $window.JSON.parse(bugDataAsString);
 
                     result.push(new Bug(bugObjectData));
                 }
-                console.table(result);
                 return result;
             };
 
             this.save = function(bug){
-                storage.setItem(bug.id, window.JSON.stringify(bug));
+                storage.setItem(bug.id, $window.JSON.stringify(bug));
             };
             this.remove = function(bug){
                 storage.removeItem(bug.id);
@@ -113,8 +115,9 @@
             };
 
         });
-        bugTrackerApp.filter("trimText", function(){
+        bugTrackerApp.filter("trimText", function(defaultTrimLength){
             return function(data, trimLength){
+                trimLength = trimLength || defaultTrimLength;
                 return data.length > trimLength ? data.substr(0,trimLength)+"..." : data ;
             }
         });
@@ -163,7 +166,7 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="bug in bugs | orderBy:sortField:sortOrder | filter:searchBug ">
-                            <td ng-class="{closed : bug.isClosed}">{{bug.title}}</td>
+                            <td ng-class="{closed : bug.isClosed}">{{bug.title | trimText:40}}</td>
                             <td>{{bug.isClosed}}</td>
                             <td>{{bug.createdAt | toMoment}}</td>
                             <td><input type="button" value="Toggle Status" ng-click="toggleStatus(bug)"></td>
