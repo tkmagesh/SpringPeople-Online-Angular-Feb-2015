@@ -40,11 +40,37 @@
 
         var bugTrackerApp = angular.module('bugTrackerApp',[]);
 
+        bugTrackerApp.service("bugStorage", function(Bug){
+
+            var storage = window.localStorage;
+
+            this.getAll = function(){
+                var result = []
+                for(var i = 0; i<storage.length; i++){
+                    var bugId = storage.key(i);
+                    var bugDataAsString = storage.getItem(bugId);
+                    var bugObjectData = window.JSON.parse(bugDataAsString);
+
+                    result.push(new Bug(bugObjectData));
+                }
+                console.table(result);
+                return result;
+            };
+
+            this.save = function(bug){
+                storage.setItem(bug.id, window.JSON.stringify(bug));
+            };
+            this.remove = function(bug){
+                storage.removeItem(bug.id);
+            };
+        })
+
         bugTrackerApp.factory("Bug", function(){
             function Bug(defaults){
+                this.id = defaults.id || new Date().valueOf().toString();
                 this.title = defaults.title;
                 this.isClosed = defaults.isClosed;
-                this.createdAt = defaults.createdAt;
+                this.createdAt = defaults.createdAt || new Date();
             }
 
             Bug.prototype.toggleStatus = function(){
@@ -54,34 +80,21 @@
         });
 
 
-        bugTrackerApp.controller("bugsController", function bugsController($scope, Bug){
-            $scope.bugs = [
-                new Bug({
-                    title : "Login button is disabled",
-                    isClosed : false,
-                    createdAt : new Date("10-Jan-2015")
-                }),
-                new Bug({
-                    title : "Application shuts down frequently",
-                    isClosed : false,
-                    createdAt : new Date("10-Feb-2015")
-                }),
-                new Bug({
-                    title : "Server communication is non deterministic",
-                    isClosed : false,
-                    createdAt : new Date("15-Feb-2015")
-                })
-            ];
+        bugTrackerApp.controller("bugsController", function bugsController($scope, Bug, bugStorage){
+            $scope.bugs = bugStorage.getAll();
 
             $scope.addBug = function(bugTitle){
-                $scope.bugs.push(new Bug({
+                var newBug = new Bug({
                     title : bugTitle,
                     isClosed : false
-                }));
+                });
+                $scope.bugs.push(newBug);
+                bugStorage.save(newBug);
             };
 
             $scope.toggleStatus = function(bug){
                 bug.toggleStatus();
+                bugStorage.save(bug);
             };
             $scope.getClosedCount = function(){
                 return $scope.bugs.filter(function (bug){
@@ -92,7 +105,9 @@
             $scope.removeClosed = function(){
                 for(var i= $scope.bugs.length-1; i>=0; i--){
                     if ($scope.bugs[i].isClosed){
+                        bugStorage.remove($scope.bugs[i]);
                         $scope.bugs.splice(i,1);
+
                     }
                 }
             };
@@ -148,7 +163,7 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="bug in bugs | orderBy:sortField:sortOrder | filter:searchBug ">
-                            <td>{{bug.title}}</td>
+                            <td ng-class="{closed : bug.isClosed}">{{bug.title}}</td>
                             <td>{{bug.isClosed}}</td>
                             <td>{{bug.createdAt | toMoment}}</td>
                             <td><input type="button" value="Toggle Status" ng-click="toggleStatus(bug)"></td>

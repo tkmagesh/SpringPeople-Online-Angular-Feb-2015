@@ -81,6 +81,20 @@ Use Cases
 13. Create categories of bugs
 14. Implement a routing strategy
 
+localStorage
+============
+key/value store
+    window.localStorage
+    both key and value should be string
 
+APIs
+    setItem(key, value)
+    getItem(key) => value
+    removeItem(key)
+    key(index) => key
+    clear()
+    length
+    
+    
 
     
