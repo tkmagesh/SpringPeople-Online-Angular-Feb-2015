@@ -1,0 +1,8 @@
+{
+    "bugs" : [
+        {"id": "1", "title" : "Login button disabled", "isClosed" : true, "createdAt" : "" },
+        {"id": "2", "title" : "Server connections closes frequently", "isClosed" : false, "createdAt" : "" },
+        {"id": "3", "title" : "Unable to submit data", "isClosed" : true, "createdAt" : "" },
+        {"id": "4", "title" : "Invalid authorization", "isClosed" : false, "createdAt" : "" }
+    ]
+}

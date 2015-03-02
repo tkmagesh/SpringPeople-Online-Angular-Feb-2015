@@ -76,10 +76,15 @@ Use Cases
 8. Display the 'created at' for each bug
 9. sort the bugs by title or status or createdAt
 10. Persist the bugs in the local storage
+
 11. Persist the bugs in the server
 12. Add validations to the bugs screen
 13. Create categories of bugs
 14. Implement a routing strategy
+15. Custom Directives
+16. Unit Testing
+17. Web Sockets
+
 
 localStorage
 ============
@@ -99,4 +104,43 @@ Same origin policy
 a.com 
 b.com
 
+Server Communication
+$http
+$resource
+
+
+RESTful
+    data as a resource 
+    
+    url 
+    http://myapp.com/categories/1
+    GET - select
+    POST - insert
+    PUT - update
+    DELETE - delete
+    
+    HTTP Status codes - 
+    
+    
+Asynchronous Operations
+1. callbacks
+2. events
+
+
+function getCalculator(){
+    var eventHandlers = [];
+    return {
+        addResultHandler : function(resultHandler){
+            eventHandlers.push(resultHandler);
+        },
+        add : function(x,y){
+            setTimeout(function(){
+                var result = x + y;
+                eventHandlers.forEach(function(handler){
+                    handler(result);
+                });
+            },5000)
+        }
+    }
+}
     

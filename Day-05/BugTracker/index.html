@@ -81,9 +81,32 @@
             return Bug;
         });
 
+        bugTrackerApp.factory("bugService", function($http, Bug, $q){
+            return {
+                getAll : function(){
+                    var deferred = $q.defer();
+                    var promise = $http({
+                        method : "get",
+                        url : "bugsData.json"
+                    });
+                    promise.then(function(response){
+                        var result = response.data.bugs.map(function(bugData){
+                            return new Bug(bugData);
+                        });
+                        deferred.resolve(result);
+                    });
+                    return deferred.promise;
+                }
+            }
+        });
 
-        bugTrackerApp.controller("bugsController", function bugsController($scope, Bug, bugStorage){
-            $scope.bugs = bugStorage.getAll();
+        bugTrackerApp.controller("bugsController", function bugsController($scope, Bug, bugStorage, bugService){
+            //$scope.bugs = bugStorage.getAll();
+
+            var promise = bugService.getAll();
+            promise.then(function(bugs){
+                $scope.bugs = bugs;
+            });
 
             $scope.addBug = function(bugTitle){
                 var newBug = new Bug({
@@ -140,13 +163,22 @@
         <div>
             <input type="text" ng-model="searchBug.title">
         </div>
-        <h3>{{bugs | closedCount }} / {{bugs.length}}</h3>
+        <!--<h3>{{bugs | closedCount }} / {{bugs.length}}</h3>-->
         <label for="">Bug Title :</label>
         <input type="text" ng-model="newBugTitle">
         <input type="button" value="Add Bug" ng-click="addBug(newBugTitle)">
         <input type="button" value="Remove Closed" ng-click="removeClosed()">
         <ol>
-            <table>
+            <!--<li
+                ng-repeat="bug in bugs | orderBy:'createdAt':true | filter:searchBug "
+                ng-click="toggleStatus(bug)"
+                ng-class="{closed : bug.isClosed}"
+                >
+                <span class="bugTitle">{{bug.title | trimText:30}}</span> -
+                <span class="timeStamp">{{bug.createdAt | toMoment}}</span>
+                </li>-->
+
+                <table>
                     <thead>
                         <tr>
                             <th ng-click="sortOrder = sortField == 'title' ? !sortOrder : false; sortField = 'title'; ">Title</th>
