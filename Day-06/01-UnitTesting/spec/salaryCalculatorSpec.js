@@ -32,18 +32,20 @@ describe("A Salary Calculator", function(){
 
     it("Should trigger listeners when basic is changing", function(){
         //Arrange
-        var basicChangeListenerInvoked = false;
-        var basicChangeListener = function (){
-            basicChangeListenerInvoked = true;
+
+        var listener = {
+            basic : function (){
+            }
         };
 
-        calculator.addSubscriber("basic",basicChangeListener);
+        spyOn(listener, "basic");
+        calculator.addSubscriber("basic",listener.basic);
 
         //Act
         calculator.set("basic",10000);
 
         //Assert
-        expect(basicChangeListenerInvoked).toBeTruthy();
+        expect(listener.basic).toHaveBeenCalled();
 
     });
 });

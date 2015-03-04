@@ -12,7 +12,7 @@ function SalaryCalculator(){
             this.set = function(attrName, value){
                 _data[attrName] = value;
                 //trigger change notification to all subscribers
-                //triggerEvents(attrName)
+                triggerEvents(attrName)
             };
 
             var _subscribers = {
