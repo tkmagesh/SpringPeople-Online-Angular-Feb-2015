@@ -83,7 +83,7 @@
 
         bugTrackerApp.factory("bugService", function($http, Bug, $q){
             return {
-                getAll : function(){
+               /* getAll : function(){
                     var deferred = $q.defer();
                     var promise = $http({
                         method : "get",
@@ -96,6 +96,21 @@
                         deferred.resolve(result);
                     });
                     return deferred.promise;
+                }*/
+                 getAll : function(){
+                    //var deferred = $q.defer();
+                    var promise = $http({
+                        method : "get",
+                        url : "bugsData.json"
+                    });
+                    return promise.then(function(response){
+                        var result = response.data.bugs.map(function(bugData){
+                            return new Bug(bugData);
+                        });
+                        //deferred.resolve(result);
+                        return result;
+                    });
+                    //return deferred.promise;
                 }
             }
         });

@@ -76,12 +76,12 @@ Use Cases
 8. Display the 'created at' for each bug
 9. sort the bugs by title or status or createdAt
 10. Persist the bugs in the local storage
-
 11. Persist the bugs in the server
 12. Add validations to the bugs screen
 13. Create categories of bugs
 14. Implement a routing strategy
-15. Custom Directives
+
+
 16. Unit Testing
 17. Web Sockets
 
@@ -143,4 +143,18 @@ function getCalculator(){
         }
     }
 }
+
+
+QUnit
+
+Jasmine
+    expect
+    Jasmine Spy
     
+Mocha
+    chai.js
+        expect
+        should
+        assert
+    Sinon.js
+

@@ -21,8 +21,15 @@
                     redirectTo : "/products/P101"
                 });
         });
-        routingApp.controller("productsController", function($scope, $routeParams){
-            $scope.msg = "Information about product - [" + $routeParams.productId + "] will be displayed here";
+        routingApp.factory("productService", function($routeParams){
+            return {
+                msg : function(){
+                    return "Information about product - [" + $routeParams.productId + "] will be displayed here";
+                }
+            }
+        });
+        routingApp.controller("productsController", function($scope, "productService"){
+            $scope.msg = productService.msg();
         });
         routingApp.controller("customersController", function($scope, $routeParams){
             $scope.msg = "Information about customer - [" + $routeParams.customerId + "] will be displayed here";
