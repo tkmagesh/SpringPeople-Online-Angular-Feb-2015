@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat Client</title>
+    <script src="angular.js"></script>
+    <script src="angular-websocket.js"></script>
+    <script>
+    var chatApp = angular.module("chatApp",["ngWebSocket"]);
+    chatApp.controller("chatController", function($scope, $websocket){
+        $scope.messages = [];
+        var socket = $websocket("ws://localhost:9090");
+
+        $scope.sendMessage = function(msg){
+            socket.send(msg);
+        };
+
+        socket.onMessage(function(message){
+
+            $scope.messages.push(message.data);
+        });
+
+    })
+    </script>
+    <script>
+   /* (function(){
+        var socket = null;
+        window.addEventListener("DOMContentLoaded", init);
+        function init(){
+            socket = new WebSocket("ws://localhost:9090");
+            socket.addEventListener("message", onMessageFromServer);
+
+            document.getElementById("btnSend").addEventListener("click", onBtnSendClick);
+        }
+        function onBtnSendClick(){
+            var msg = document.getElementById("txtMessage").value;
+            socket.send(msg);
+        }
+        function onMessageFromServer(msgEvtArg){
+            var serverMsg = msgEvtArg.data;
+            document.getElementById("divMessages").innerHTML += serverMsg + "<br/>"
+        }
+    })();*/
+    </script>
+
+</head>
+<body ng-app="chatApp">
+   <div ng-controller="chatController">
+    <input type="text" name="" id="txtMessage" ng-model="chatMessage">
+    <input type="button" value="Send" id="btnSend" ng-click="sendMessage(chatMessage)">
+    <div id="divMessages">
+        <div ng-repeat="message in messages">{{message}}</div>
+    </div>
+   </div>
+
+</body>
+</html>

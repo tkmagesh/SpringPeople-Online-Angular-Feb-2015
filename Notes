@@ -157,4 +157,32 @@ Mocha
         should
         assert
     Sinon.js
+    
+    
+Build Steps
+1. HTML minify
+2. Sass/Less to CSS
+3. Minify CSS
+4. combine css
+5. coffeescript to javascript
+6. Static code analysis of your code
+7. Unit tests
+8. minify javascript
+9. uglify javascript
+10. combine javascript
+11. version css and javascript files
+12. update html with the right version
+13. create a distributable
 
+
+
+
+To install node.js
+install node.js from nodejs.org
+
+To have grunt:
+npm install -g grunt-cli
+
+To have yeoman
+npm install -g yo
+npm install -g generator-angular
